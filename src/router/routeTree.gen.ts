@@ -11,17 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as HomeImport } from './routes/home'
 import { Route as IndexImport } from './routes/index'
 import { Route as ApplicationIndexImport } from './routes/application/index'
 
 // Create/Update Routes
-
-const HomeRoute = HomeImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -46,13 +39,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeImport
-      parentRoute: typeof rootRoute
-    }
     '/application/': {
       id: '/application/'
       path: '/application'
@@ -67,41 +53,36 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/home': typeof HomeRoute
   '/application': typeof ApplicationIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/home': typeof HomeRoute
   '/application': typeof ApplicationIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/home': typeof HomeRoute
   '/application/': typeof ApplicationIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/application'
+  fullPaths: '/' | '/application'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/application'
-  id: '__root__' | '/' | '/home' | '/application/'
+  to: '/' | '/application'
+  id: '__root__' | '/' | '/application/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HomeRoute: typeof HomeRoute
   ApplicationIndexRoute: typeof ApplicationIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HomeRoute: HomeRoute,
   ApplicationIndexRoute: ApplicationIndexRoute,
 }
 
@@ -116,15 +97,11 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/home",
         "/application/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/home": {
-      "filePath": "home.tsx"
     },
     "/application/": {
       "filePath": "application/index.tsx"

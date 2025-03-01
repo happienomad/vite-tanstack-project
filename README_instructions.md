@@ -64,7 +64,7 @@ To interact with it from your code, you'll need to provide the following HTTP he
 | HTTP Header      | Value                         |
 | ---------------- | ----------------------------- |
 | Accept           | (REQUIRED) application/json   |
-| Content-Type     | (REQUIRED) application/json   |
+| Content-Type     | (REQUIRED) application/json     |
 | X-Nesto-Candidat | (REQUIRED) Use your full name |
 
 ---
