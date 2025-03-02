@@ -1,33 +1,26 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
+import { BaseTypographyType } from '~/global/types/typography';
 
-
-interface BaseTypographyProps {
+type TypographyProps = BaseTypographyType & PropsWithChildren & {
     element?: 'p' | 'span' | 'em' | 'strong';
-    variant?: 'body1' | 'body2' | 'caption' | 'overline';
-    fontSize: 'small' | 'base' | 'large' | 'larger';
-    fontWeight?: 400 | 500 | 700;
-    textCase?: "uppercase" | "lowercase" | "capitalize";
-    emphasis?: "italic" | "highlight";
-    textAlign?: "left" | "center" | "right";
-    color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
 }
 
-const StyledTypography = styled(({ element: Element = "p", ...props }: BaseTypographyProps) => <Element {...props} />)`
-    text-transform: ${(props: BaseTypographyProps) => props.textCase || "none"};
-    font-size: ${(props: BaseTypographyProps) => `var(--typography--fontSize-${props.fontSize})`};
-    font-weight: ${(props: BaseTypographyProps) => props.fontWeight || 400};
-    font-style: ${(props: BaseTypographyProps) => props.emphasis || "normal"};
-    text-align: ${(props: BaseTypographyProps) => props.textAlign || "left"};
-    color: ${(props: BaseTypographyProps) => `var(--color-${props.color || "dark"})`};
+export const StyledTypography = styled(({ element: Element = "p", ...props }: TypographyProps) => <Element {...props} />)`
+    text-transform: ${(props: TypographyProps) => props.textCase || "none"};
+    margin: 0;
+    font-size: ${(props: TypographyProps) => `var(--typography--fontSize-${props.fontSize || "base"})`};
+    font-weight: ${(props: TypographyProps) => props.fontWeight || 400};
+    text-align: ${(props: TypographyProps) => props.textAlign || "inherit"};
+    color: ${(props: TypographyProps) => `var(--color-${props.color || "dark"})`};
+    line-height: var(--typography--lineHeight-xsmall);
+    text-decoration: ${(props: TypographyProps) => props.textDecoration || "none"}
     `;
 
-function Typography({ children, ...props }: PropsWithChildren<BaseTypographyProps>) {
+export function Typography({ children, ...props }: TypographyProps) {
     return (
         <StyledTypography {...props}>
             {children}
         </StyledTypography>
     );
 }
-
-export default Typography;
