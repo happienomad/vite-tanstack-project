@@ -1,8 +1,9 @@
 import { PropsWithChildren } from 'react';
-import nestoLogo from './assets/nesto.svg';
+import nestoLogo from '../assets/nesto.svg';
 import styled from 'styled-components';
+import { Link } from '@tanstack/react-router';
 
-const StyledShell = styled.div`
+const StyledLayout = styled.div`
     display: grid;
     grid-template-rows: 4.8rem 1fr 3rem;
     height: 100vh;
@@ -12,7 +13,7 @@ const Header = styled.header`
     width: 100%;
     padding : var(--spacing-small) var(--spacing-base);
     box-sizing: border-box;
-    > img {
+    img {
      max-height: 90%;
      }
     `;
@@ -30,11 +31,13 @@ const Footer = styled.footer`
     font-size: var(--typography--fontSize-small);
 `
 
-function Shell({ children }: PropsWithChildren) {
+function Layout({ children }: PropsWithChildren) {
     return (
-        <StyledShell>
+        <StyledLayout>
             <Header>
-                <img src={nestoLogo} alt="Nesto Logo" />
+                <Link to="/">
+                    <img src={nestoLogo} alt="Nesto Logo" />
+                </Link>
             </Header>
             <Main>
                 {children}
@@ -42,8 +45,8 @@ function Shell({ children }: PropsWithChildren) {
             <Footer>
                 <p>© 2025 Code Challenge</p>
             </Footer>
-        </StyledShell>
+        </StyledLayout>
     );
 }
 
-export default Shell;
+export default Layout;
