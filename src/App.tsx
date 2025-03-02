@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./router/routeTree.gen";
 import { i18n } from "@lingui/core";
 import GlobalStyles from "./GlobalStyles";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 declare module '@tanstack/react-router' {
     interface Register {
@@ -10,14 +11,17 @@ declare module '@tanstack/react-router' {
     }
 }
 
-const router = createRouter({ routeTree })
+const router = createRouter({ context: { queryClient: undefined! }, routeTree })
 
+const queryClient = new QueryClient();
 
 export function App() {
     return (
-        <I18nProvider i18n={i18n}>
-            <GlobalStyles />
-            <RouterProvider router={router} />
-        </I18nProvider>
+        <QueryClientProvider client={queryClient}>
+            <I18nProvider i18n={i18n}>
+                <GlobalStyles />
+                <RouterProvider context={{ queryClient }} router={router} />
+            </I18nProvider>
+        </QueryClientProvider>
     )
 }
