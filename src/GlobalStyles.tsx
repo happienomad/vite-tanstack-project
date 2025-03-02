@@ -7,6 +7,7 @@ const GlobalStyles = createGlobalStyle`
     }
 
     body {
+        font-family: Montserrat, sans-serif, Arial, Helvetica;
         line-height: 1.5;
         background-color: #f8f9fa;
         color: var(--color-dark-700);
@@ -14,15 +15,21 @@ const GlobalStyles = createGlobalStyle`
     }
 
     :root {
+        --typography--fontSize-xsmall: 0.5rem;
         --typography--fontSize-small: 0.75rem;
         --typography--fontSize-base: 1rem;
-        --typography--fontSize-large: 1.25rem;
-        --typography--fontSize-larger: 1.5rem;
+        --typography--fontSize-medium: 1.25rem;
+        --typography--fontSize-large: 1.5rem;
+        --typography--fontSize-larger: 1.75rem;
+        --typography--fontSize-largest: 2rem;
+        --typography--fontSize-extravagant: 2.25rem;
         
-        --typography--lineHeight-small: 1.2;
+        --typography--lineHeight-xsmall: 1;
+        --typography--lineHeight-small: 1.25;
         --typography--lineHeight-base: 1.5;
-        --typography--lineHeight-large: 1.8;
-        --typography--lineHeight-larger: 2.1;
+        --typography--lineHeight-medium: 1.75;
+        --typography--lineHeight-large: 2;
+        --typography--lineHeight-larger: 2.25;
 
         --spacing-none: 0;
         --spacing-xsmall: 0.25rem;

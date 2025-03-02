@@ -8,7 +8,6 @@ interface BaseButtonProps extends PropsWithChildren {
     'aria-describedby'?: string;
     'aria-expanded'?: boolean;
     'aria-haspopup'?: boolean;
-    type?: 'button' | 'submit' | 'reset' | 'link';
 
 }
 
@@ -16,6 +15,7 @@ interface ButtonActionProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onMousDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset' | 'link';
 }
 
 interface ButtonAnchorProps {
