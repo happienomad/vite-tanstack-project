@@ -20,12 +20,25 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-    /* Linting */
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "~/components/*": [
+        "./src/components/*"
+      ],
+      "~/global/*": [
+        "./src/global/*"
+      ],
+      "~/features/*": [
+        "./src/features/*"
+      ],
+      "~/api/*": [
+        "./src/api/*"
+      ]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "src",
