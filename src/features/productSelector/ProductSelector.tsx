@@ -1,15 +1,13 @@
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { postData } from '../../api/fetch'
 import { Product, ProductType, ProductTypeKeys } from '~/global/types/product'
-import { ChangeEvent, useState } from 'react'
-import ToggleSwitch from '~/components/ToggleSwitch';
-import { Products } from './ProductList'
+import { ProductList } from './ProductList/ProductList';
 import { Trans } from '@lingui/react/macro';
 import { Heading } from '~/components/Heading';
 import { Application, CreateApplication } from '~/global/types/application';
 import { useNavigate } from '@tanstack/react-router';
-import { StyledProductSelector } from './ProductSelector.styled';
 import { productsQueryOptions } from '~/api/queries/queryOptions';
+import { Divider } from '~/components/Divider';
 
 type ProductCards = {
     [key in ProductTypeKeys]: Product[];
@@ -18,7 +16,6 @@ type ProductCards = {
 export function ProductSelector() {
 
     const navigate = useNavigate();
-
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
 
     const mutation = useMutation({
@@ -37,8 +34,6 @@ export function ProductSelector() {
         VARIABLE: [],
     }
 
-    const [selectedProductType, setSelectedProductType] = useState<ProductTypeKeys>('FIXED');
-
     if (allProducts) {
         allProducts.forEach((product) => {
             if (ProductType.safeParse(product.type).success) {
@@ -47,42 +42,20 @@ export function ProductSelector() {
         });
     }
 
-
-    const bestRateProducts = products[selectedProductType].reduce((acc, product) => {
-        if (acc.length === 0 || product.bestRate === acc[0].bestRate) {
-            acc.push(product);
-        } else if (product.bestRate < acc[0].bestRate) {
-            acc = [product];
-        }
-        return acc;
-    }, [] as Product[]);
-
-    const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedProductType(e.target.checked ? "FIXED" : "VARIABLE");
+    const onProductSelect = (productId: number) => {
+        mutation.mutate({ productId })
     }
 
     return (
-        <StyledProductSelector>
-            <Heading element="h1">
+        <>
+            <Heading element="h1" align="center">
                 <Trans>
                     We found some best products for you
                 </Trans>
             </Heading>
-            <ToggleSwitch
-                onLabel={ProductType.Enum.FIXED}
-                offLabel={ProductType.Enum.VARIABLE}
-                handleToggle={handleToggle}
-                id="productType"
-                name="productType"
-                checked={selectedProductType === "FIXED"}
-            />
-            <Products.List>
-                {
-                    bestRateProducts.map((product) => (
-                        <Products.Card key={product.id} product={product} onSelect={(product: Product) => mutation.mutate({ productId: product.id })} />
-                    ))
-                }
-            </Products.List>
-        </StyledProductSelector>
+            <ProductList type="FIXED" products={products["FIXED"]} onProductSelect={onProductSelect} />
+            <Divider direction="horizontal" />
+            <ProductList type="VARIABLE" products={products["VARIABLE"]} onProductSelect={onProductSelect} />       
+        </>
     )
 }
