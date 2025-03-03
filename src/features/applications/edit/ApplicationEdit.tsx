@@ -3,7 +3,7 @@ import { StyledApplicationEdit } from "./ApplicationEdit.styled"
 import { getRouteApi } from "@tanstack/react-router";
 import { ProductCard } from "~/components/ProductCard";
 import { ApplicationForm } from "../form/ApplicationForm";
-import { applicationQueryOptions, productsQueryOptions } from "~/api/queries/queryOptions";
+import { applicationbyIdQueryOptions, productsQueryOptions } from "~/api/queries/queryOptions";
 
 
 const routeApi = getRouteApi("/_products/applications/$applicationId");
@@ -12,7 +12,7 @@ export function ApplicationEdit() {
 
     const { applicationId } = routeApi.useParams();
 
-    const { data: applicationInfo } = useSuspenseQuery(applicationQueryOptions(applicationId));
+    const { data: applicationInfo } = useSuspenseQuery(applicationbyIdQueryOptions(applicationId));
 
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
 
