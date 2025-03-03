@@ -6,6 +6,7 @@ interface InputProps {
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name?: string;
+    type?: "text" | "email";
 }
 
 const StyledInput = styled.input<InputProps>`

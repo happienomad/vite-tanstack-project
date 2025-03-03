@@ -29,7 +29,7 @@ export function ProductCard({ product, onSelect }: ProductCardProps) {
         <StyledProductCardSection>
             <Heading element="h3">
                 <Trans>
-                    Best {product.type === "FIXED" ? "Fixed" : "Variable"} Rate
+                    Best {product.type === "FIXED" ? "Fixed" : "Variable"}
                 </Trans>
             </Heading>
             <Typography fontSize="small">{product.name}</Typography>
@@ -41,7 +41,7 @@ export function ProductCard({ product, onSelect }: ProductCardProps) {
         <Typography>{product.lenderName}</Typography>
         {
             onSelect && <Button onClick={() => onSelect(product)}>
-                <Trans>Continue</Trans>
+                <Trans>Select this product</Trans>
             </Button>
         }
     </StyledProductCard>)

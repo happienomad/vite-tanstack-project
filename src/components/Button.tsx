@@ -13,7 +13,7 @@ interface BaseButtonProps extends PropsWithChildren {
 
 interface ButtonActionProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onMousDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onMouseDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
     type?: 'button' | 'submit' | 'reset' | 'link';
 }
@@ -31,7 +31,7 @@ const StyledButton = styled.button<ButtonProps>`
     background-color: var(--color-primary);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     font-size: var(--typography--fontSize-base);
     padding: var(--spacing-small) var(--spacing-medium);
     text-decoration: none;
@@ -42,7 +42,7 @@ const StyledButton = styled.button<ButtonProps>`
 `;
 
 // TODO: Update types to differentiate button and anchor props (XOR)
-function Button({ onClick, children, href, target, ...buttonProps }: ButtonProps) {
+function Button({ onClick, onMouseDown, children, href, target, ...buttonProps }: ButtonProps) {
 
     if (href) {
         return (
@@ -53,7 +53,7 @@ function Button({ onClick, children, href, target, ...buttonProps }: ButtonProps
     }
 
     return (
-        <StyledButton onClick={onClick} {...buttonProps}>
+        <StyledButton onClick={onClick} onMouseDown={onMouseDown || onClick} {...buttonProps}>
             {children}
         </StyledButton>
     );

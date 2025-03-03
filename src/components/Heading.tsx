@@ -4,6 +4,7 @@ import { HeadingVariantsType, BaseTypographyType } from "~/global/types/typograp
 
 type HeadingProps = PropsWithChildren & {
     element?: HeadingVariantsType;
+    align?: BaseTypographyType["textAlign"];
 }
 
 const fontSizeMap: {
@@ -24,5 +25,6 @@ export const Heading = styled(({ element: Element = "h1", ...props }: HeadingPro
     line-height: ${(props: HeadingProps) =>
         `var(--typography--lineHeight-${fontSizeMap[props.element || "h1"]})`
     };
-    margin: 0
+    margin: 0;
+    text-align: ${(props: HeadingProps) => props.align}
 `;

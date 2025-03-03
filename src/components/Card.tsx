@@ -10,7 +10,7 @@ interface CardProps extends PropsWithChildren {
 
 export const Card = styled.div<CardProps>`
     border: 1px solid var(--color-dark-300);
-    border-radius: 4px;
+    border-radius: 10px;
     padding: ${(props: CardProps) => `var(--spacing-${props.padding || "base"})`};
     margin: var(--spacing-small) 0;
     box-shadow: var(--color-dark-300) 0px 3px 8px;
