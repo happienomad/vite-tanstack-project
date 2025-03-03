@@ -10,9 +10,16 @@ export const productsQueryOptions = queryOptions<Product[]>({
 });
 
 
-export const applicationQueryOptions = (applicationId: string) => {
+export const applicationbyIdQueryOptions = (applicationId: string) => {
     return queryOptions<Application>({
-        queryKey: ['application',],
+        queryKey: ['applicationById'],
         queryFn: () => getData(`applications/${applicationId}`)
+    })
+}
+
+export const applicationsQueryOptions = () => {
+    return queryOptions<Application[]>({
+        queryKey: ['applications'],
+        queryFn: () => getData("applications")
     })
 }

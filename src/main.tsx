@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from './App'
-import { DEFAULT_LOCALE, dynamicActivate } from '../internationalization/i18n';
+import { DEFAULT_LOCALE, dynamicActivate } from './internationalization/i18n';
 
 
 dynamicActivate(DEFAULT_LOCALE).then(() => {

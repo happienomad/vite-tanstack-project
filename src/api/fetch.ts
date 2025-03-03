@@ -5,6 +5,8 @@ const headers = {
     'X-Nesto-Candidat': 'Sandeep Ponagandla'
 }
 
+export const API_HOST = 'https://nesto-fe-exam.vercel.app/api'
+
 export async function getData<T>(url: string): Promise<T> {
     const options: RequestInit = {
         method: "GET",
@@ -12,7 +14,7 @@ export async function getData<T>(url: string): Promise<T> {
     };
 
     try {
-        const response = await fetch(`https://nesto-fe-exam.vercel.app/api/${url}`, options);
+        const response = await fetch(`${API_HOST}/${url}`, options);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -31,7 +33,7 @@ export async function postData<T>(url: string, body: string, method: "POST" | "P
     };
 
     try {
-        const response = await fetch(`https://nesto-fe-exam.vercel.app/api/${url}`, options);
+        const response = await fetch(`${API_HOST}/${url}`, options);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

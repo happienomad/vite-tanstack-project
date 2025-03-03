@@ -6,8 +6,9 @@ export const Route = createFileRoute("/_products")({
     loader({
         context: { queryClient }
     }) {
+        console.log("Hitting the loader method");
         return {
-            queryRef: queryClient.ensureQueryData(productsQueryOptions)
+            queryRef: queryClient.prefetchQuery(productsQueryOptions)
         }
     },
-})
+});

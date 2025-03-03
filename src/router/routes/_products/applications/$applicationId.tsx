@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { applicationQueryOptions } from '~/api/queries/queryOptions'
-import { ApplicationEdit } from '~/features/application/edit/ApplicationEdit'
+import { applicationbyIdQueryOptions } from '~/api/queries/queryOptions'
+import { ApplicationEdit } from '~/features/applications/edit/ApplicationEdit'
 
 export const Route = createFileRoute('/_products/applications/$applicationId')({
   component: ApplicationEdit,
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_products/applications/$applicationId')({
     params: { applicationId }
   }) {
     return {
-      queryRef: queryClient.prefetchQuery(applicationQueryOptions(applicationId))
+      queryRef: queryClient.prefetchQuery(applicationbyIdQueryOptions(applicationId))
     }
   }
 })
