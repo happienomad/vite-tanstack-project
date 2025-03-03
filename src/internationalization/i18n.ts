@@ -11,7 +11,7 @@ export type SupportedLocales = (typeof LOCALES)[keyof typeof LOCALES];
 
 export const DEFAULT_LOCALE: SupportedLocales = LOCALES.EnglishCA;
 
-const localeMessages = {
+export const localeMessages = {
     [LOCALES.EnglishCA]: import(`./locales/${LOCALES.EnglishCA}.po`)
 } as const;
 

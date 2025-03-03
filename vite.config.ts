@@ -1,8 +1,10 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import { lingui } from '@lingui/vite-plugin';
 import path from 'path';
+import tsConfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,6 +14,8 @@ export default defineConfig({
       "~/global": path.resolve(__dirname, "src/global"),
       "~/features": path.resolve(__dirname, "src/features"),
       "~/api": path.resolve(__dirname, "src/api"),
+      "~/router": path.resolve(__dirname, "src/router"),
+      "~/i18n": path.resolve(__dirname, "src/internationalization")
     }
   },
   plugins: [
@@ -27,5 +31,6 @@ export default defineConfig({
       }
     }),
     lingui(),
-  ],
+    tsConfigPaths()
+  ]
 })

@@ -48,3 +48,24 @@ export default tseslint.config({
   },
 })
 ```
+
+# Tech Stack choices
+
+React + Typescript is the default choice as per the instructions. The other tooling that I used to build this project are as follows 
+
+- Vite Server
+- Tanstack Router
+- Lingui
+- Vitest + React Testing Library
+- Axios
+
+
+Questions
+
+1. Are there any restrictions on the libraries that can be used? Instructions document recommends not using frameworks for css and I am totally onboard with it, but I would like to know if there any strong objections in using libraries like react-hook-form or date-fns etc
+2. I see there is a requirement to add a view that lists all the completed applications. 
+  - Is this view open for everyone? 
+  - Should there be a link somewhere on the application to access this list view? 
+  - Should the list be paginated?
+3. I am not sure about the requirements of **screen 1**. This particular point " - display two lists of one or more of the **best** mortgage products(s), one list for each type of mortgage" is not clear to me. Does this mean there can be more than one product of same type with a **best** mortgage rate? 
+4. This is a clarification question to if there will be multiple products of same type with **best** mortgage rate. The `Home` screen mockup displays **fixed** and **variable** mortgage options side by side, but I believe this layout may not be ideal when there are more than one product of same type. Would it be acceptable if I add a toggle to switch between fixed and variable lists instead?

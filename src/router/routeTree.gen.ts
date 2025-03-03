@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProductsImport } from './routes/_products'
 import { Route as ProductsIndexImport } from './routes/_products/index'
+import { Route as ProductsApplicationsIndexImport } from './routes/_products/applications/index'
 import { Route as ProductsApplicationsApplicationIdImport } from './routes/_products/applications/$applicationId'
 
 // Create/Update Routes
@@ -25,6 +26,12 @@ const ProductsRoute = ProductsImport.update({
 const ProductsIndexRoute = ProductsIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ProductsRoute,
+} as any)
+
+const ProductsApplicationsIndexRoute = ProductsApplicationsIndexImport.update({
+  id: '/applications/',
+  path: '/applications/',
   getParentRoute: () => ProductsRoute,
 } as any)
 
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsApplicationsApplicationIdImport
       parentRoute: typeof ProductsImport
     }
+    '/_products/applications/': {
+      id: '/_products/applications/'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ProductsApplicationsIndexImport
+      parentRoute: typeof ProductsImport
+    }
   }
 }
 
@@ -68,12 +82,14 @@ declare module '@tanstack/react-router' {
 interface ProductsRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   ProductsApplicationsApplicationIdRoute: typeof ProductsApplicationsApplicationIdRoute
+  ProductsApplicationsIndexRoute: typeof ProductsApplicationsIndexRoute
 }
 
 const ProductsRouteChildren: ProductsRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   ProductsApplicationsApplicationIdRoute:
     ProductsApplicationsApplicationIdRoute,
+  ProductsApplicationsIndexRoute: ProductsApplicationsIndexRoute,
 }
 
 const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
@@ -84,11 +100,13 @@ export interface FileRoutesByFullPath {
   '': typeof ProductsRouteWithChildren
   '/': typeof ProductsIndexRoute
   '/applications/$applicationId': typeof ProductsApplicationsApplicationIdRoute
+  '/applications': typeof ProductsApplicationsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof ProductsIndexRoute
   '/applications/$applicationId': typeof ProductsApplicationsApplicationIdRoute
+  '/applications': typeof ProductsApplicationsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -96,18 +114,20 @@ export interface FileRoutesById {
   '/_products': typeof ProductsRouteWithChildren
   '/_products/': typeof ProductsIndexRoute
   '/_products/applications/$applicationId': typeof ProductsApplicationsApplicationIdRoute
+  '/_products/applications/': typeof ProductsApplicationsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/applications/$applicationId'
+  fullPaths: '' | '/' | '/applications/$applicationId' | '/applications'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/applications/$applicationId'
+  to: '/' | '/applications/$applicationId' | '/applications'
   id:
     | '__root__'
     | '/_products'
     | '/_products/'
     | '/_products/applications/$applicationId'
+    | '/_products/applications/'
   fileRoutesById: FileRoutesById
 }
 
@@ -136,7 +156,8 @@ export const routeTree = rootRoute
       "filePath": "_products.tsx",
       "children": [
         "/_products/",
-        "/_products/applications/$applicationId"
+        "/_products/applications/$applicationId",
+        "/_products/applications/"
       ]
     },
     "/_products/": {
@@ -145,6 +166,10 @@ export const routeTree = rootRoute
     },
     "/_products/applications/$applicationId": {
       "filePath": "_products/applications/$applicationId.tsx",
+      "parent": "/_products"
+    },
+    "/_products/applications/": {
+      "filePath": "_products/applications/index.tsx",
       "parent": "/_products"
     }
   }

@@ -36,13 +36,24 @@
       ],
       "~/api/*": [
         "./src/api/*"
+      ],
+      "~/router/*": [
+        "./src/router/*"
+      ],
+      "~/i18n/*": [
+        "./src/internationalization/*"
       ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
+    "env.d.ts",
     "src",
     "**/*.tsx",
-    "**/*.ts"
-  ]
+    "**/*.ts",
+    "vitest.config.ts",
+  ],
 }
