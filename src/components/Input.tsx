@@ -2,11 +2,12 @@ import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
 interface InputProps {
-    value: string;
+    value?: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name?: string;
-    type?: "text" | "email";
+    type?: "text" | "email" | "tel";
+    id: string;
 }
 
 const StyledInput = styled.input<InputProps>`
@@ -18,9 +19,9 @@ const StyledInput = styled.input<InputProps>`
     box-sizing: border-box;
 `;
 
-function Input({ value, onChange, ...inputProps }: InputProps) {
+function Input({ value, id, onChange, ...inputProps }: InputProps) {
     return (
-        <StyledInput type="text" value={value} onChange={onChange} {...inputProps} />
+        <StyledInput id={id} type="text" value={value} onChange={onChange} {...inputProps} />
     );
 };
 

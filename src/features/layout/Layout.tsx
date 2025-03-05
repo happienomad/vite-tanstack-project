@@ -1,46 +1,41 @@
 import { PropsWithChildren } from 'react';
 import nestoLogo from '../assets/nesto.svg';
-import styled from 'styled-components';
-import { Link } from '@tanstack/react-router';
-
-const StyledLayout = styled.div`
-    display: grid;
-    grid-template-rows: 4.8rem 1fr 3rem;
-    height: 100vh;
-`;
-
-const Header = styled.header`
-    width: 100%;
-    padding : var(--spacing-small) var(--spacing-base);
-    box-sizing: border-box;
-    img {
-     max-height: 90%;
-     }
-    `;
-
-const Main = styled.main`
-    padding: var(--spacing-base);
-    box-sizing: border-box;
-`;
-
-const Footer = styled.footer`
-    padding: var(--spacing-small) var(--spacing-base);
-    box-sizing: border-box;
-    text-align: center;
-    background-color: #f8f9fa;
-    font-size: var(--typography--fontSize-small);
-`
+import translateIcon from "../assets/translate.svg";
+import { Footer, Header, HeaderMenu, Main, MaxWidthContainer, StyledLayout } from './Layout.styled';
+import { Trans } from '@lingui/react/macro';
+import Button from '~/components/Button';
+import { Link } from '~/components/Link';
+import { i18n } from '@lingui/core';
+import { dynamicActivate, LOCALES } from '~/i18n/i18n';
 
 function Layout({ children }: PropsWithChildren) {
+
+    const toggleTranslations = () => {
+        const currentLocale = i18n.locale;
+
+        // Just toggling between en-CA and fr-CA for the moment to confirm translations work
+        void dynamicActivate(currentLocale === LOCALES.EnglishCA ? LOCALES.FrenchCA : LOCALES.EnglishCA);
+        
+    }
     return (
         <StyledLayout>
             <Header>
                 <Link to="/">
                     <img src={nestoLogo} alt="Nesto Logo" />
                 </Link>
+                <HeaderMenu>
+                    <Button variant="secondary" onClick={toggleTranslations}>
+                        <img src={translateIcon} width="24" height="24" />
+                    </Button>
+                    <Link to="/applications">
+                        <Trans>Applications</Trans>
+                    </Link>
+                </HeaderMenu>
             </Header>
             <Main>
-                {children}
+                <MaxWidthContainer>
+                    {children}
+                </MaxWidthContainer>
             </Main>
             <Footer>
                 <p>© 2025 Code Challenge</p>

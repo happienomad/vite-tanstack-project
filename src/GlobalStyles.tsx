@@ -40,10 +40,12 @@ const GlobalStyles = createGlobalStyle`
         --spacing-large: 1.5rem;
         --spacing-larger: 2rem;
         --spacing-xlarge: 3rem;
+        --spacing-xxlarge: 4rem;
 
         --color-primary: #e91207;
         --color-primary-hover: #d41106;
-        --color-secondary: #3d66b0;
+        --color-secondary: #e9ecef;
+        --color-secondary-hover: #ced4da;
         --color-success: #28a745;
         --color-danger: #dc3545;
         --color-warning: #ffc107;
@@ -53,6 +55,17 @@ const GlobalStyles = createGlobalStyle`
         --color-dark-500: #495057;
         --color-dark-300: #ced4da;
         --color-dark-100: #e9ecef; 
+        --color-white: #FFF;
+        --color-disabled:#b5bcc2;
+
+        --color-button-primary: var(--color-primary);
+        --color-button-primary-hover: var(--color-primary-hover);
+        --color-button-secondary: var(--color-white);
+        --color-button-secondary-hover: var(--color-dark-100); 
+
+        --text--color-primary: #FFF;
+        --text--color-secondary: #495057;
+
     }
 `;
 
@@ -68,12 +81,12 @@ const size: {
 }
   
 export const device = {
-xs: `(max-width: ${size.xs})`,
-sm: `(max-width: ${size.sm})`,
-md: `(max-width: ${size.md})`,
-lg: `(max-width: ${size.lg})`,
-xl: `(max-width: ${size.xl})`,
-xxl: `(max-width: ${size.xxl})`,
+xs: `(min-width: ${size.xs})`,
+sm: `(min-width: ${size.sm})`,
+md: `(min-width: ${size.md})`,
+lg: `(min-width: ${size.lg})`,
+xl: `(min-width: ${size.xl})`,
+xxl: `(min-width: ${size.xxl})`,
 }
 
 export default GlobalStyles;

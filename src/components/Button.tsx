@@ -8,52 +8,60 @@ interface BaseButtonProps extends PropsWithChildren {
     'aria-describedby'?: string;
     'aria-expanded'?: boolean;
     'aria-haspopup'?: boolean;
-
+    variant?: 'primary' | 'secondary'
 }
 
 interface ButtonActionProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onMouseDown?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onKeyPress?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
     type?: 'button' | 'submit' | 'reset' | 'link';
 }
 
 interface ButtonAnchorProps {
     href: string;
-    target: string;
+    target?: string;
 }
 
 type ButtonProps = BaseButtonProps & XOR<ButtonActionProps, ButtonAnchorProps>;
 
 
 
-const StyledButton = styled.button<ButtonProps>`
-    background-color: var(--color-primary);
-    color: white;
+export const StyledButton = styled.button<ButtonProps>`
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: var(--typography--fontSize-base);
     padding: var(--spacing-small) var(--spacing-medium);
     text-decoration: none;
     cursor: ${(props: ButtonProps) => props.disabled ? "default" : "pointer"};
+    background-color: ${(props: BaseButtonProps) => `var(--color-button-${props.variant})`};
+    color: ${(props: BaseButtonProps) => `var(--text--color-${props.variant})`};
+    transition: all 0.1s ease-in;
+
     &:hover {
-        background-color: var(--color-primary-hover);
+        background-color: ${(props: BaseButtonProps) => `var(--color-button-${props.variant}-hover)`};
+    }
+
+    &:disabled {
+        background-color: var(--color-dark-300);
+        color: var(--color-dark-500);
+        cursor: not-allowed;
     }
 `;
 
 // TODO: Update types to differentiate button and anchor props (XOR)
-function Button({ onClick, onMouseDown, children, href, target, ...buttonProps }: ButtonProps) {
+function Button({ onClick, onKeyPress, children, variant = "primary", href, target, ...buttonProps }: ButtonProps) {
 
     if (href) {
         return (
-            <StyledButton as="a" href={href} target={target}>
+            <StyledButton as="a" href={href} target={target} variant={variant}>
                 {children}
             </StyledButton>
         );
     }
 
     return (
-        <StyledButton onClick={onClick} onMouseDown={onMouseDown || onClick} {...buttonProps}>
+        <StyledButton onClick={onClick} onKeyPress={onKeyPress} {...buttonProps} variant={variant}>
             {children}
         </StyledButton>
     );

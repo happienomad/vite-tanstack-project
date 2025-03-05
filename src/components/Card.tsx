@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react";
 import { styled } from "styled-components";
 import { BaseTypographyType } from "~/global/types/typography";
+import { device } from "../GlobalStyles";
 
 
 interface CardProps extends PropsWithChildren {
@@ -16,17 +17,21 @@ export const Card = styled.div<CardProps>`
     box-shadow: var(--color-dark-300) 0px 3px 8px;
     width: 100%;
     box-sizing: border-box;
-    width: ${(props: CardProps) => {
-        switch (props.variant) {
-            case "small":
-                return "280px";
-            case "medium":
-                return "400px";
-            case "large":
-                return "600px";
-            case "full":
-                return "100%";
+    width: 96%;
+
+    @media(${device.sm}) {
+        width: ${(props: CardProps) => {
+            switch (props.variant) {
+                case "small":
+                    return "280px";
+                case "medium":
+                    return "400px";
+                case "large":
+                    return "600px";
+                case "full":
+                    return "100%";
+            }
         }
     }
 
-    }`;
+}`;
