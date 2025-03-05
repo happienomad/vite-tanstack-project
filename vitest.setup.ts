@@ -21,6 +21,10 @@ beforeAll(() => {
     })
 })
 
-afterEach(() => {
-    cleanup()
+afterEach(() => server.resetHandlers());
+
+afterAll(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+    server.close();
 })

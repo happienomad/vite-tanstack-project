@@ -5,29 +5,60 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/features/applications/applicationsList/ApplicationsList.tsx:41
+msgid "Actions"
+msgstr ""
+
+#: src/features/applications/applicationsList/ApplicationsList.tsx:35
+msgid "Applicant email"
+msgstr ""
+
+#: src/features/applications/applicationsList/ApplicationsList.tsx:32
+msgid "Applicant Name"
+msgstr ""
+
+#: src/features/applications/applicationsList/ApplicationsList.tsx:38
+msgid "Applicant phone"
+msgstr ""
+
+#: src/features/layout/Layout.tsx:23
+msgid "Applications"
+msgstr ""
 
 #. placeholder {0}: product.type === "FIXED" ? "Fixed" : "Variable"
-#: src/components/ProductCard.tsx:31
-msgid "Best {0} Rate"
+#: src/components/ProductCard.tsx:38
+msgid "Best {0}"
 msgstr ""
 
-#: src/components/ProductCard.tsx:44
-msgid "Continue"
+#: src/features/applications/applicationsList/ApplicationsList.tsx:26
+msgid "Date created"
 msgstr ""
 
-#: src/features/application/form/ApplicationForm.tsx:88
+#: src/features/applications/applicationsList/ApplicationsList.tsx:104
+msgid "Edit"
+msgstr ""
+
+#: src/features/applications/form/ApplicationForm.tsx:97
 msgid "email address:"
 msgstr ""
 
-#: src/features/application/form/ApplicationForm.tsx:52
+#: src/features/applications/form/ApplicationForm.tsx:61
 msgid "First Name:"
 msgstr ""
 
-#: src/features/application/form/ApplicationForm.tsx:70
+#: src/features/applications/form/ApplicationForm.tsx:79
 msgid "Last Name:"
 msgstr ""
 
-#: src/features/application/form/ApplicationForm.tsx:44
+#: src/features/applications/form/ApplicationForm.tsx:53
 msgid "Main Applicant Information"
 msgstr ""
 
@@ -35,7 +66,7 @@ msgstr ""
 msgid "Phone number should contain only digits"
 msgstr ""
 
-#: src/features/application/form/ApplicationForm.tsx:106
+#: src/features/applications/form/ApplicationForm.tsx:115
 msgid "Phone number:"
 msgstr ""
 
@@ -55,10 +86,30 @@ msgstr ""
 msgid "Please enter your phone number"
 msgstr ""
 
+#: src/features/applications/applicationsList/ApplicationsList.tsx:29
+msgid "Product Name"
+msgstr ""
+
+#: src/features/applications/form/ApplicationForm.tsx:133
+msgid "Save"
+msgstr ""
+
+#: src/features/applications/form/ApplicationForm.tsx:133
+msgid "Saving"
+msgstr ""
+
 #: src/features/productSelector/ProductSelector.loading.tsx:8
 msgid "Searching the best products for you"
 msgstr ""
 
+#: src/components/ProductCard.tsx:51
+msgid "Select this product"
+msgstr ""
+
 #: src/components/InputValidation.tsx:7
 msgid "This is a required field"
+msgstr ""
+
+#: src/features/productSelector/ProductSelector.tsx:52
+msgid "We found some best products for you"
 msgstr ""

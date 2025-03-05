@@ -2,10 +2,14 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en-CA\n"
+"Language: fr-CA\n"
 "X-Generator: @lingui/cli\n"
 "MIME-Version: 1.0\n"
 
 #: src/features/applications/form/ApplicationForm.tsx:53
 msgid "Main Applicant Information"
-msgstr "Main Applicant Information"
+msgstr "Informations principales sur le candidat"
+
+#: src/features/productSelector/ProductSelector.tsx:52
+msgid "We found some best products for you"
+msgstr "Nous avons trouvé les meilleurs produits pour vous"

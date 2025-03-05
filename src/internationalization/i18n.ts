@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { i18n } from "@lingui/core";
 
-const LOCALES = {
+export const LOCALES = {
     EnglishUS: "en-US",
     EnglishCA: "en-CA",
     FrenchCA: "fr-CA"
@@ -12,7 +12,8 @@ export type SupportedLocales = (typeof LOCALES)[keyof typeof LOCALES];
 export const DEFAULT_LOCALE: SupportedLocales = LOCALES.EnglishCA;
 
 export const localeMessages = {
-    [LOCALES.EnglishCA]: import(`./locales/${LOCALES.EnglishCA}.po`)
+    [LOCALES.EnglishCA]: import(`./locales/${LOCALES.EnglishCA}.po`),
+    [LOCALES.FrenchCA]: import(`./locales/${LOCALES.FrenchCA}.po`)
 } as const;
 
 export async function dynamicActivate(locale: SupportedLocales) {
