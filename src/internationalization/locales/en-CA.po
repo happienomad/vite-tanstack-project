@@ -9,3 +9,7 @@ msgstr ""
 #: src/features/applications/form/ApplicationForm.tsx:53
 msgid "Main Applicant Information"
 msgstr "Main Applicant Information"
+
+#: src/features/productSelector/ProductSelector.tsx:52
+msgid "We found some best products for you"
+msgstr "We found some best products for you"
