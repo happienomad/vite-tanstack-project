@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trans } from "@lingui/react/macro";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Card } from "~/components/Card";
 import Input from "~/components/Input";
 import { Typography } from "~/components/Typography";
@@ -10,6 +10,7 @@ import Button from "~/components/Button";
 import { InputValidation } from "~/components/InputValidation";
 import { useMutation } from "@tanstack/react-query";
 import { postData } from "~/api/fetch";
+import { useRouter } from "@tanstack/react-router";
 
 export interface ApplicationFormProps {
     applicant: Applicant;
@@ -17,18 +18,25 @@ export interface ApplicationFormProps {
 }
 
 export function ApplicationForm({ applicant, applicationId }: ApplicationFormProps) {
-
-    const { formState, control, handleSubmit } = useForm<Applicant>({
+    
+    const { formState, handleSubmit, register } = useForm<Applicant>({
         defaultValues: applicant,
+        values: applicant,
         reValidateMode: "onBlur",
         resolver: zodResolver(ApplicantSchema)
     });
+
+    const { navigate } = useRouter();
 
     const { mutate: updateApplication } = useMutation({
         mutationKey: ["createApplication"],
         mutationFn: (body: Partial<Application>) => postData(`applications/${applicationId}`, JSON.stringify(body), "PUT"),
         onSuccess: (data) => {
-            console.log("Updated::", data);
+            if(data) {
+                void navigate({
+                    to: "/applications"
+                })
+            }
         }
     })
 
@@ -53,11 +61,7 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Controller control={control} name="firstName"
-                            render={({ field: { onChange, value } }) => {
-                                return <Input onChange={onChange} value={value} />
-                            }}
-                        />
+                        <Input id="firstName" {...register("firstName")} />
                         {
                             formState.errors.firstName &&
                             <InputValidation message={formState.errors.firstName.message} />
@@ -71,11 +75,7 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Controller control={control} name="lastName"
-                            render={({ field: { onChange, value } }) => {
-                                return <Input onChange={onChange} value={value} />
-                            }}
-                        />
+                        <Input id="lastName" {...register("lastName")} />
                         {
                             formState.errors.lastName &&
                             <InputValidation message={formState.errors.lastName.message} />
@@ -89,11 +89,7 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Controller control={control} name="email"
-                            render={({ field: { onChange, value } }) => {
-                                return <Input onChange={onChange} value={value} />
-                            }}
-                        />
+                        <Input id="email" type="email" {...register("email")} />
                         {
                             formState.errors.email &&
                             <InputValidation message={formState.errors.email.message} />
@@ -107,11 +103,7 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Controller control={control} name="phone"
-                            render={({ field: { onChange, value } }) => {
-                                return <Input onChange={onChange} value={value} />
-                            }}
-                        />
+                        <Input id="phone" type="tel" {...register("phone")} />
                         {
                             formState.errors.phone &&
                             <InputValidation message={formState.errors.phone.message} />
@@ -119,8 +111,10 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                     </StyledForm.Input>
                 </StyledForm.Field>
                 <StyledForm.ButtonContainer>
-                    <Button type="submit">
-                        Submit
+                    <Button type="submit" disabled={formState.isSubmitting}>
+                        {
+                            formState.isSubmitting ? <Trans>Saving</Trans> : <Trans>Save</Trans>
+                        }
                     </Button>
                 </StyledForm.ButtonContainer>
             </StyledForm.Form>

@@ -1,22 +1,30 @@
 import { styled } from "styled-components";
+import { device } from "../../../GlobalStyles";
 
 const Container = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
-    grid-gap: var(--spacing-small);
+    display: flex;
+    flex-direction: column;
+    grid-gap: var(--spacing-large);
     height: 100vh;
+    margin: 0 auto;
+
+    @media(${device.sm}) {
+        flex-direction: row;
+        align-items: start;
+        grid-gap: var(--spacing-xxlarge);
+    }
 `;
 
 const ProductDetails = styled.div`
-    grid-column: 1 / 2;
-    display: grid;
+    display: flex;
     justify-content: center;
     align-items: start;
 `
 
 const ApplicationForm = styled.div`
-    grid-column: 2 / 4;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `
 
 export const StyledApplicationEdit = {

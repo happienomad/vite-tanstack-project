@@ -1,26 +1,13 @@
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 import { ProductCard } from "~/components/ProductCard";
-import { Typography } from "~/components/Typography";
-import { Product, ProductTypeKeys } from "~/global/types/product";
-import { Products } from "./ProductList.styled";
-
-const ProductTypeMap : {
-    [key in ProductTypeKeys] : string
-} = {
-    "FIXED" : t`Fixed`,
-    "VARIABLE": t`Variable`
-}
+import { Product } from "~/global/types/product";
+import { StyledProductList } from "./ProductList.styled";
 
 interface ProductListProps {
-    type: ProductTypeKeys;
     products: Product[];
     onProductSelect: (productId: number) => void;
 }
 
-export function ProductList({ type, products, onProductSelect } : ProductListProps) {
-    const productType = ProductTypeMap[type];
-
+export function ProductList({ products, onProductSelect } : ProductListProps) {
 
     const bestRateProducts = products.reduce((acc, product) => {
         if (acc.length === 0 || product.bestRate === acc[0].bestRate) {
@@ -30,23 +17,19 @@ export function ProductList({ type, products, onProductSelect } : ProductListPro
         }
         return acc;
     }, [] as Product[]);
+
+    const totalProducts = bestRateProducts.length;
+
+    if(totalProducts === 0) {
+        return;
+    }
     
     return (
-        <Products.Container>
-            <Typography fontSize="medium" fontWeight="400">
-                <Trans>
-                    {productType} rate products
-                </Trans>
-            </Typography>
-            <Products.List>
-                {
-                    bestRateProducts.map((product) => (
-                        <Products.Card key={product.id}>
-                            <ProductCard product={product} onSelect={(product: Product) => onProductSelect(product.id)} />
-                        </Products.Card>
-                    ))
-                }
-            </Products.List>
-        </Products.Container>
+        <StyledProductList>
+            <ProductCard product={bestRateProducts[0]} onSelect={onProductSelect} />
+            {
+                totalProducts > 1 && <a href="#">and {bestRateProducts.length - 1} more product</a>
+            }
+        </StyledProductList>
     )
 }

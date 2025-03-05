@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { StyledApplicationEdit } from "./ApplicationEdit.styled"
 import { getRouteApi } from "@tanstack/react-router";
 import { ProductCard } from "~/components/ProductCard";
-import { ApplicationForm } from "../form/ApplicationForm";
+import { ApplicationForm } from "./form/ApplicationForm";
 import { applicationbyIdQueryOptions, productsQueryOptions } from "~/api/queries/queryOptions";
 
 
@@ -15,6 +15,7 @@ export function ApplicationEdit() {
     const { data: applicationInfo } = useSuspenseQuery(applicationbyIdQueryOptions(applicationId));
 
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
+    
 
     const selectedProduct = allProducts.find((product) => product.id === applicationInfo.productId);
 

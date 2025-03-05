@@ -1,21 +1,15 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import styled from "styled-components";
 import { applicationsQueryOptions } from "~/api/queries/queryOptions";
+import { useProducts } from "../../../hooks/useProducts";
+import { Trans } from "@lingui/react/macro";
+import { Application } from "~/global/types/application";
+import { Link } from "@tanstack/react-router";
+import { Table } from "~/components/Table";
+import { StyledApplicationList } from "./ApplicationList.styled";
 
-const StyledTable = {
-    Container: styled.div`
-        position: relative;
-        border: 1px solid var(--color-dark-300);
-        border-radius: 10px;
-        overflow: hidden;
-    `,
-    Table: styled.table`
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-    `,
-    Thead: styled.thead`
-    `
+
+interface ApplicationsTableRowsProps {
+    applications: Application[];
 }
 
 export function ApplicationsList() {
@@ -23,48 +17,80 @@ export function ApplicationsList() {
     const { data: applications } = useSuspenseQuery(applicationsQueryOptions());
   
     return (
-      <StyledTable.Container>
-        <StyledTable.Table>
-          <thead>
-            <tr>
-              <td>
-                Date created
-              </td>
-              <td>
-                Product Name
-              </td>
-              <td>
-                Applicant Name
-              </td>
-              <td>
-                Applicant email
-              </td>
-              <td>
-                Applicant phone
-              </td>
-              <td>
-                Actions
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-              {
-                applications.map((application) => {
-                  const applicant = application.applicants[0];
-                  return (
-                    <tr key={application.id}>
-                      <td>{application.createdAt}</td>
-                      <td>{application.productId}</td>
-                      <td>{applicant.firstName} {applicant.lastName}</td>
-                      <td>{applicant.email}</td>
-                      <td>{applicant.phone}</td>
-                      <td></td>
+      <StyledApplicationList.Container>
+        <StyledApplicationList.OverflowContainer>
+            <Table>
+                <Table.THead>
+                    <tr>
+                    <td>
+                        <Trans>Date created</Trans>
+                    </td>
+                    <td>
+                        <Trans>Product Name</Trans>
+                    </td>
+                    <td>
+                        <Trans>Applicant Name</Trans>
+                    </td>
+                    <td>
+                        <Trans>Applicant email</Trans>
+                    </td>
+                    <td>
+                        <Trans>Applicant phone</Trans>
+                    </td>
+                    <td>
+                        <Trans>Actions</Trans>
+                    </td>
                     </tr>
-                  )
-                })
-              }
-          </tbody>
-        </StyledTable.Table>
-      </StyledTable.Container>
+                </Table.THead>
+                <Table.TBody>
+                    <ApplicationsTableRows applications={applications } />
+                </Table.TBody>
+            </Table>
+        </StyledApplicationList.OverflowContainer>
+      </StyledApplicationList.Container>
     )
+  }
+
+  function ApplicationsTableRows({ applications } : ApplicationsTableRowsProps) {
+    
+        const productMap = useProducts();
+
+        const completedApplications = applications.filter((application) => {
+            if(!application.productId) {
+                return;
+            }
+
+            const applicant = application.applicants[0];
+
+            // Condition to check if application is valid
+            return applicant && applicant.email;
+        })
+        
+        return (
+            <>
+                {
+                    completedApplications.map((application) => {
+                        const applicant = application.applicants[0];
+                        const product = productMap[application.productId || ""];
+                        return (
+                            <tr key={application.id}>
+                                <td>{application.createdAt}</td>
+                                <td>{product.name}</td>
+                                <td>{applicant.firstName} {applicant.lastName}</td>
+                                <td>{applicant.email}</td>
+                                <td>{applicant.phone}</td>
+                                <td>
+                                    <Link 
+                                        to="/applications/$applicationId" 
+                                        params={{ applicationId: application.id }} 
+                                    >
+                                        <Trans>Edit</Trans>
+                                    </Link>
+                                </td>
+                            </tr>
+                        )
+                    })
+                }
+            </>
+        )
   }

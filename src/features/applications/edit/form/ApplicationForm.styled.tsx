@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { device } from "../../../../GlobalStyles";
 
 
 const Form = styled.form`
@@ -11,17 +12,26 @@ const Form = styled.form`
 
 const Field = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;    
     grid-template-rows: auto;
+
+    @media(${device.sm}) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 `
 
 const Label = styled.div`
-    grid-column: 1 / 2;
     font-size: var(--typography--fontSize-base)
+
+    @media(${device.md}) {
+        grid-column: 1 / 2; 
+    }
 `
 
 const Input = styled.div`
-    grid-column: 2 / 4;
+    @media(${device.md}) {
+        grid-column: 2 / 4;
+    }
 `
 
 const ButtonContainer = styled.div`

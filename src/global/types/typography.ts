@@ -10,7 +10,7 @@ const TypographyWeightEnum = z.enum(['300', '400', '600', '700']);
 
 const TypographyTextCaseEnum = z.enum(["uppercase", "lowercase", "capitalize"]);
 
-const TypographyColorEnum = z.enum(["primary", "secondary", "danger", "warning", "info", "success"]);
+const TypographyColorEnum = z.enum(["primary", "secondary", "danger", "warning", "info", "success", "disabled"]);
 
 const TypographyTextAlignEnum = z.enum(["left", "center", "right"]);
 

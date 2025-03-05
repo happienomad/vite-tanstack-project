@@ -40,3 +40,7 @@ export type Product = {
     created: string;
     updated: string;
 }
+
+export type ProductMap = {
+    [key: string]: Product;
+}

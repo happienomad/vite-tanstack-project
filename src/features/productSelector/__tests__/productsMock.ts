@@ -141,7 +141,7 @@ export const allProductsMock : Product[] = [
     }
 ];
 
-export const multipleProductsWithBestRateMock: Product[] = [
+export const multipleProductsWithBestFixedRateMock: Product[] = [
     {
         "id": 12311,
         "name": "Standard Special",
