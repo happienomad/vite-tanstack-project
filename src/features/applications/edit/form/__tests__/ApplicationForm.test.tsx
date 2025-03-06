@@ -11,6 +11,8 @@ import { i18n } from "@lingui/core";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Applicant } from "~/global/types/application";
+import { ToastProvider } from "~/global/providers/ToastProvider";
+import { act } from "react";
 
 interface SetupTestProps {
     overrides?: {
@@ -19,15 +21,13 @@ interface SetupTestProps {
 }
 
 
-const testApplicant = (applicant?: Partial<Applicant>) => {
-    return {
-        firstName: "James",
-        lastName: "Cameron",
-        email: "james@avatar.com",
-        phone: "8888888888",
-        ...applicant
-    }
+const VALID_APPLICANT = {
+    firstName: "James",
+    lastName: "Cameron",
+    email: "james@avatar.com",
+    phone: "8888888888",
 }
+
 
 const DEFAULT_APPLICANT: Applicant = {
     phone: "",
@@ -36,7 +36,18 @@ const DEFAULT_APPLICANT: Applicant = {
     lastName: ""
 }
 
-const DEFAULT_APPLICATION_ID = "c2f82924-612c-4489-b6ad-188d2db447d1"
+const DEFAULT_APPLICATION_ID = "c2f82924-612c-4489-b6ad-188d2db447d1";
+
+const generateApplicantDetails = (applicant?: Partial<Applicant>) => {
+    return {
+        ...DEFAULT_APPLICANT,
+        ...applicant
+    }
+}
+
+export async function waitForRenderingToFinish() {
+    return act(() => Promise.resolve());
+}
 
 function setupTest({
     overrides
@@ -78,9 +89,11 @@ function setupTest({
     render(<RouterProvider<typeof router> router={router} />, {
         wrapper: ({ children }) => (
             <QueryClientProvider client={queryClient}>
-                <I18nProvider i18n={i18n}>
-                    {children}
-                </I18nProvider>
+                <ToastProvider>
+                    <I18nProvider i18n={i18n}>
+                        {children}
+                    </I18nProvider>
+                </ToastProvider>
             </QueryClientProvider>
         )
     })
@@ -96,37 +109,39 @@ function applicantFormPOM() {
         return screen.findByText(text);
     };
 
+    const getSubmitButton = () => screen.findByRole("button", {
+        name: "Save"
+    });
+
     const iSubmitTheApplicantForm = async () => {
-        const submitButton = await screen.findByRole("button", {
-            name: "Save"
-        });
+
+        const submitButton = await getSubmitButton();
         if(submitButton) {
-            await user.click(submitButton);
+            await user.click(submitButton)
         } else {
             throw new Error("Cannot find submit button");
         }
     }
 
     const iCompleteTheFormWithData = async (applicant?: Partial<Applicant>) => {
+        
         const firstName = screen.getByLabelText("First Name:");
         const lastName = screen.getByLabelText("Last Name:");
         const email = screen.getByLabelText("email address:");
         const phone = screen.getByLabelText("Phone number:");
 
-        const applicantInfo = testApplicant(applicant);
+        const applicantInfo = generateApplicantDetails(applicant);
 
-        await user.type(firstName, applicantInfo.firstName);
-        await user.tab();
-        await user.type(lastName, applicantInfo.lastName);
-        await user.tab();
-        await user.type(email, applicantInfo.email);
-        await user.tab();
-        await user.type(phone, applicantInfo.phone);
+        await user.type(firstName, applicantInfo.firstName|| '{tab}');
+        await user.type(lastName, applicantInfo.lastName || '{tab}');
+        await user.type(email, applicantInfo.email || '{tab}');
+        await user.type(phone, applicantInfo.phone || '{tab}');
         await iSubmitTheApplicantForm();
     }
 
     return {
         searchText,
+        getSubmitButton,
         iSubmitTheApplicantForm,
         iCompleteTheFormWithData
     }
@@ -156,30 +171,34 @@ describe("Should render the application form", () => {
         setupTest();
         expect(await screen.findByText("Main Applicant Information")).toBeInTheDocument();
         expect(await screen.findByText("First Name:")).toBeInTheDocument();
+        const { getSubmitButton } = applicantFormPOM();
+        expect(await getSubmitButton()).toBeDisabled();
     });
 
-    it("Should throw validation errors when form fields are empty", async () => {
+    it("Should not submit the applicant details when an invalid email is entered", async () => {
         setupTest();
-        const { iSubmitTheApplicantForm, searchText } = applicantFormPOM();
-        await iSubmitTheApplicantForm();
-        
-        expect(await searchText("Please enter a valid email")).toBeVisible();
-        expect(await searchText("Please enter your phone number")).toBeVisible();
+        const { searchText, iCompleteTheFormWithData } = applicantFormPOM();
+        await iCompleteTheFormWithData({
+            email: "abcd"
+        });
+        expect(await searchText("Please enter a valid email address")).toBeVisible();
     });
 
     it("Should not submit the applicant details when an invalid phone number is entered", async () => {
         setupTest();
         const { searchText, iCompleteTheFormWithData } = applicantFormPOM();
         await iCompleteTheFormWithData({
-            phone: "12334"
+            phone: "3123123"
         });
-        expect(await searchText("Phone Number must be at least 10 characters")).toBeVisible();
-    });
+        expect(await searchText("Phone Number must be exactly 10 digits")).toBeVisible();
+        expect(navigateMock).not.toHaveBeenCalled();
+    })
 
     it("Should submit the applicant details when all valid data is entered", async () => {
         setupTest();
-        const { iCompleteTheFormWithData } = applicantFormPOM();
-        await iCompleteTheFormWithData();
+        const { iCompleteTheFormWithData, iSubmitTheApplicantForm } = applicantFormPOM();
+        await iSubmitTheApplicantForm();
+        await iCompleteTheFormWithData(VALID_APPLICANT);
         expect(navigateMock).toHaveBeenCalledWith(expect.objectContaining({
             to: "/applications"
         }))

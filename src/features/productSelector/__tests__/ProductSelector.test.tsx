@@ -13,6 +13,7 @@ import { RouterContext } from "~/global/types/router";
 import { Route } from "~/router/routes/_products";
 import { Product } from "~/global/types/product";
 import { API_HOST } from "~/api/fetch";
+import { ToastProvider } from "~/global/providers/ToastProvider";
 
 interface SetupTestProps {
     overrides?: {
@@ -51,6 +52,28 @@ function setupTest({
         })
     )
 
+    renderRouter();
+}
+
+function setupTestWithErrors({
+    overrides
+}: SetupTestProps = { overrides: { products: allProductsMock } }) {
+    server.use(
+        http.get(`${API_HOST}/products`, () => {
+            return HttpResponse.json(overrides?.products)
+        })
+    )
+
+    server.use(
+        http.post(`${API_HOST}/applications`, () => {
+            return HttpResponse.error()
+        })
+    )
+
+    renderRouter();
+}
+
+function renderRouter() {
     const root = createRootRouteWithContext<RouterContext>()();
 
     const _products = createRoute({
@@ -81,9 +104,11 @@ function setupTest({
     render(<RouterProvider<typeof router> router={router} />, {
         wrapper: ({ children }) => (
             <QueryClientProvider client={queryClient}>
-                <I18nProvider i18n={i18n}>
-                    {children}
-                </I18nProvider>
+                <ToastProvider>
+                    <I18nProvider i18n={i18n}>
+                        {children}
+                    </I18nProvider>
+                </ToastProvider>
             </QueryClientProvider>
         )
     })
@@ -169,4 +194,11 @@ describe("ProductSelector", () => {
             }
         }))
     });
+
+    it("Should show a toast message when api throws an error while creating a new application", async () => {
+        setupTestWithErrors();
+        const { searchText, iChooseProduct } = productSelectorPOM();
+        await iChooseProduct("MCAP Value-Flex Variable Special");
+        expect(await searchText("Failed to fetch")).toBeVisible();
+    })
 });
