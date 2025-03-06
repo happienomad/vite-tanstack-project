@@ -1,9 +1,10 @@
 import { ChangeEvent } from 'react';
 import { styled } from 'styled-components';
 
-interface InputProps {
+export interface InputProps {
     value?: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onKeyUp?:(event: React.KeyboardEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name?: string;
     type?: "text" | "email" | "tel";

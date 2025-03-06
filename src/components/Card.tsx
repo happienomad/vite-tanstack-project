@@ -18,6 +18,7 @@ export const Card = styled.div<CardProps>`
     width: 100%;
     box-sizing: border-box;
     width: 96%;
+    position: relative;
 
     @media(${device.sm}) {
         width: ${(props: CardProps) => {
