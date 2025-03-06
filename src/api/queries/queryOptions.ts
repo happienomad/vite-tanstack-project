@@ -13,6 +13,7 @@ export const applicationbyIdQueryOptions = (applicationId: string) => {
     return queryOptions<Application>({
         queryKey: ['applicationById', applicationId],
         queryFn: () => getData(`applications/${applicationId}`),
+        staleTime: 10000
     })
 }
 
