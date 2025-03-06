@@ -2,12 +2,13 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { postData } from '../../api/fetch'
 import { Product, ProductType, ProductTypeKeys } from '~/global/types/product'
 import { ProductList } from './ProductList/ProductList';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 import { Heading } from '~/components/Heading';
 import { Application, CreateApplication } from '~/global/types/application';
 import { useRouter } from '@tanstack/react-router';
 import { productsQueryOptions } from '~/api/queries/queryOptions';
 import { StyledProductsContainer, StyledProductSelector } from './ProductSelector.styled';
+import { useToast } from '~/global/providers/ToastProvider';
 
 type ProductCards = {
     [key in ProductTypeKeys]: Product[];
@@ -15,7 +16,9 @@ type ProductCards = {
 
 export function ProductSelector() {
 
+    const { showToast } = useToast();
     const { navigate } = useRouter();
+    const  { t } = useLingui();
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
 
     const mutation = useMutation({
@@ -26,8 +29,17 @@ export function ProductSelector() {
                 to: "/applications/$applicationId",
                 params: { applicationId: data.id }
             })
+            showToast({
+                message: t`Creating your new application`,
+                status: "info"
+            });
         },
-        onError: (error) => console.error(error)
+        onError: (error) => {
+            showToast({
+                message: error.message || t`Something went wrong! Please try again`,
+                status: "error"
+            });
+        }
     })
 
     const products: ProductCards = {
@@ -46,7 +58,7 @@ export function ProductSelector() {
     const onProductSelect = (productId: number) => {
         mutation.mutate({ productId })
     }
-    
+
     return (
         <StyledProductSelector>
             <Heading element="h1" align="center">

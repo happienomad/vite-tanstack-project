@@ -2,10 +2,11 @@ import { styled } from "styled-components";
 import { device } from "../../GlobalStyles";
 
 export const StyledProductSelector = styled.div`
-    display: grid;
-    grid-template-rows : repeat(2, max-content)
+    display: flex;
+    flex-direction: column;
     gap: var(--spacing-small);
     align-items: center;
+    justify-content: center;
 `;
 
 export const StyledProductsContainer = styled.div`
