@@ -57,6 +57,7 @@ const GlobalStyles = createGlobalStyle`
         --color-dark-100: #e9ecef; 
         --color-white: #FFF;
         --color-disabled:#b5bcc2;
+        --color-error: var(--color-danger);
 
         --color-button-primary: var(--color-primary);
         --color-button-primary-hover: var(--color-primary-hover);
@@ -65,6 +66,13 @@ const GlobalStyles = createGlobalStyle`
 
         --text--color-primary: #FFF;
         --text--color-secondary: #495057;
+
+
+        --radius-small: 4px;
+        --radius-base: 8px;
+        --radius-large: 16px;
+        --radius-larger: 24px;
+        --radius-circle: 100%;
 
     }
 `;

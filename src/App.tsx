@@ -5,6 +5,7 @@ import { i18n } from "@lingui/core";
 import GlobalStyles from "./GlobalStyles";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./api/queryClient";
+import { ToastProvider } from "./global/providers/ToastProvider";
 
 declare module '@tanstack/react-router' {
     interface Register {
@@ -18,8 +19,10 @@ export function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <I18nProvider i18n={i18n}>
-                <GlobalStyles />
-                <RouterProvider context={{ queryClient }} router={router} />
+                <ToastProvider>
+                    <GlobalStyles />
+                    <RouterProvider context={{ queryClient }} router={router} />
+                </ToastProvider>
             </I18nProvider>
         </QueryClientProvider>
     )
