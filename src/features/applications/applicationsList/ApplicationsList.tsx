@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { applicationsQueryOptions } from "~/api/queries/queryOptions";
-import { useProducts } from "../../../hooks/useProducts";
+import { useProducts } from "~/global/hooks/useProducts";
 import { Trans } from "@lingui/react/macro";
 import { Application } from "~/global/types/application";
 import { Link } from "@tanstack/react-router";

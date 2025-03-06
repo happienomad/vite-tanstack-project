@@ -4,6 +4,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import { ProductCard } from "~/components/ProductCard";
 import { ApplicationForm } from "./form/ApplicationForm";
 import { applicationbyIdQueryOptions, productsQueryOptions } from "~/api/queries/queryOptions";
+import { LoadingOverlay } from "~/components/LoadingOverlay";
 
 
 const routeApi = getRouteApi("/_products/applications/$applicationId");
@@ -12,7 +13,7 @@ export function ApplicationEdit() {
 
     const { applicationId } = routeApi.useParams();
 
-    const { data: applicationInfo } = useSuspenseQuery(applicationbyIdQueryOptions(applicationId));
+    const { data: applicationInfo, isPending } = useSuspenseQuery(applicationbyIdQueryOptions(applicationId));
 
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
     
@@ -27,7 +28,9 @@ export function ApplicationEdit() {
                 }
             </StyledApplicationEdit.ProductDetails>
             <StyledApplicationEdit.ApplicationForm>
-                <ApplicationForm applicationId={applicationId} applicant={applicationInfo.applicants[0]} />
+                <ApplicationForm applicationId={applicationId} applicant={applicationInfo.applicants[0]}>
+                    { isPending && <LoadingOverlay />}
+                </ApplicationForm>
             </StyledApplicationEdit.ApplicationForm>
         </StyledApplicationEdit.Container>
     )

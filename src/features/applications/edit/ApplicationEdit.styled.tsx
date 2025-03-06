@@ -5,7 +5,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     grid-gap: var(--spacing-large);
-    height: 100vh;
     margin: 0 auto;
 
     @media(${device.sm}) {
@@ -30,5 +29,5 @@ const ApplicationForm = styled.div`
 export const StyledApplicationEdit = {
     Container,
     ProductDetails,
-    ApplicationForm
+    ApplicationForm,
 }

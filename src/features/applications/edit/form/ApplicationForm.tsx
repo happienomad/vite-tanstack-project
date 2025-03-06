@@ -1,34 +1,40 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useForm } from "react-hook-form";
 import { Card } from "~/components/Card";
 import Input from "~/components/Input";
 import { Typography } from "~/components/Typography";
-import { Applicant, ApplicantSchema, Application } from "~/global/types/application";
+import { Applicant, Application } from "~/global/types/application";
 import { StyledForm } from "./ApplicationForm.styled";
 import Button from "~/components/Button";
 import { InputValidation } from "~/components/InputValidation";
 import { useMutation } from "@tanstack/react-query";
 import { postData } from "~/api/fetch";
 import { useRouter } from "@tanstack/react-router";
+import { useToast } from "~/global/providers/ToastProvider";
+import { checkForValidEmail, validatePhoneNumber } from "./utils";
+import { InputPhone } from "~/components/InputPhone";
+import { PropsWithChildren } from "react";
 
-export interface ApplicationFormProps {
+export interface ApplicationFormProps extends PropsWithChildren {
     applicant: Applicant;
     applicationId: string;
 }
 
-export function ApplicationForm({ applicant, applicationId }: ApplicationFormProps) {
+export function ApplicationForm({ applicant, applicationId, children }: ApplicationFormProps) {
     
-    const { formState, handleSubmit, register } = useForm<Applicant>({
+    const { formState, reset, handleSubmit, register } = useForm<Applicant>({
+        mode: "all",
         defaultValues: applicant,
         values: applicant,
-        reValidateMode: "onBlur",
-        resolver: zodResolver(ApplicantSchema)
+        reValidateMode: "onSubmit"
     });
 
+    const { showToast } = useToast();
     const { navigate } = useRouter();
 
-    const { mutate: updateApplication } = useMutation({
+    const { t } = useLingui();
+
+    const { mutate: updateApplication, isPending } = useMutation({
         mutationKey: ["createApplication"],
         mutationFn: (body: Partial<Application>) => postData(`applications/${applicationId}`, JSON.stringify(body), "PUT"),
         onSuccess: (data) => {
@@ -37,6 +43,14 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                     to: "/applications"
                 })
             }
+        },
+        onError: (error) => {
+            if(error.message) {
+                showToast({
+                    message: error.message,
+                    status: "error"
+                });
+            }
         }
     })
 
@@ -44,16 +58,24 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
         updateApplication({
             applicants: [data]
         })
-    }
+    };
+
+    const onError = () => {
+        showToast({
+            message: t`Please enter valid information and try again`,
+            status: "error"
+        });
+    } 
 
     return (
         <Card padding="large" variant="full">
+            {children}
             <Typography fontSize="medium" fontWeight="600">
                 <Trans>
                     Main Applicant Information
                 </Trans>
             </Typography>
-            <StyledForm.Form onSubmit={handleSubmit(onSubmit)}>
+            <StyledForm.Form aria-label="applicantForm" onSubmit={handleSubmit(onSubmit, onError)}>
                 <StyledForm.Field>
                     <StyledForm.Label>
                         <label htmlFor="firstName">
@@ -61,7 +83,12 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Input id="firstName" {...register("firstName")} />
+                        <Input placeholder="First Name" id="firstName" {...register("firstName", {
+                            required: {
+                                value: true,
+                                message: t`Please enter your first name`
+                            }
+                        })} />
                         {
                             formState.errors.firstName &&
                             <InputValidation message={formState.errors.firstName.message} />
@@ -75,7 +102,12 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Input id="lastName" {...register("lastName")} />
+                        <Input placeholder="Last Name" id="lastName" {...register("lastName", {
+                            required: {
+                                value: true,
+                                message: t`Please enter your last name`
+                            }
+                        })} />
                         {
                             formState.errors.lastName &&
                             <InputValidation message={formState.errors.lastName.message} />
@@ -89,7 +121,13 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Input id="email" type="email" {...register("email")} />
+                        <Input placeholder="test@example.com" id="email" type="email" {...register("email", {
+                            required: {
+                                value: true,
+                                message: t`Please enter your email address`
+                            },
+                            validate: (value) => checkForValidEmail(value, t`Please enter a valid email address`)
+                        })} />
                         {
                             formState.errors.email &&
                             <InputValidation message={formState.errors.email.message} />
@@ -103,17 +141,26 @@ export function ApplicationForm({ applicant, applicationId }: ApplicationFormPro
                         </label>
                     </StyledForm.Label>
                     <StyledForm.Input>
-                        <Input id="phone" type="tel" {...register("phone")} />
+                        <InputPhone placeholder="(***) ***-****" id="phone" type="tel" {...register("phone", {
+                            required: {
+                                value: true,
+                                message: t`Please enter your phone number`
+                            },
+                            validate: (value: string) => validatePhoneNumber(value, t`Phone Number must be exactly 10 digits`)
+                        })} />
                         {
                             formState.errors.phone &&
-                            <InputValidation message={formState.errors.phone.message} />
+                            <InputValidation message={formState.errors.phone.message as string} />
                         }
                     </StyledForm.Input>
                 </StyledForm.Field>
                 <StyledForm.ButtonContainer>
-                    <Button type="submit" disabled={formState.isSubmitting}>
+                    <Button type="reset" variant="secondary" onClick={() => reset()}>
+                        <Trans>Reset</Trans>
+                    </Button>
+                    <Button type="submit" disabled={!formState.isValid || isPending}>
                         {
-                            formState.isSubmitting ? <Trans>Saving</Trans> : <Trans>Save</Trans>
+                            isPending ? <Trans>Saving</Trans> : <Trans>Save</Trans>
                         }
                     </Button>
                 </StyledForm.ButtonContainer>
