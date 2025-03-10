@@ -1,8 +1,6 @@
 import Input, { InputProps } from "./Input";
 
-interface InputPhoneProps extends InputProps {
-
-}
+type InputPhoneProps = InputProps
 
 export function InputPhone({ ...props } : InputPhoneProps) {
 

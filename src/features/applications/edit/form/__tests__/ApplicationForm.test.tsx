@@ -4,7 +4,7 @@ import { API_HOST } from "~/api/fetch";
 import { queryClient } from "~/api/queryClient";
 import { server } from "~/global/tests/nodeServer";
 import { RouterContext } from "~/global/types/router";
-import { ApplicationForm } from "../ApplicationForm";
+import { ApplicationForm } from "../ApplicantForm";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";

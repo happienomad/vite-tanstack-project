@@ -1,26 +1,25 @@
-import { Trans, useLingui } from "@lingui/react/macro";
+import { PropsWithChildren } from "react";
 import { useForm } from "react-hook-form";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card } from "~/components/Card";
 import Input from "~/components/Input";
 import { Typography } from "~/components/Typography";
-import { Applicant, Application } from "~/global/types/application";
-import { StyledForm } from "./ApplicationForm.styled";
+import { Applicant } from "~/global/types/application";
+import { StyledForm } from "./ApplicantForm.styled";
 import Button from "~/components/Button";
 import { InputValidation } from "~/components/InputValidation";
-import { useMutation } from "@tanstack/react-query";
-import { postData } from "~/api/fetch";
-import { useRouter } from "@tanstack/react-router";
 import { useToast } from "~/global/providers/ToastProvider";
 import { checkForValidEmail, validatePhoneNumber } from "./utils";
 import { InputPhone } from "~/components/InputPhone";
-import { PropsWithChildren } from "react";
 
 export interface ApplicationFormProps extends PropsWithChildren {
     applicant: Applicant;
-    applicationId: string;
+    onSubmit: (data: Applicant) => void;
+    isUpdatePending?: boolean;
+
 }
 
-export function ApplicationForm({ applicant, applicationId, children }: ApplicationFormProps) {
+export function ApplicantForm({ applicant, onSubmit, children, isUpdatePending }: ApplicationFormProps) {
     
     const { formState, reset, handleSubmit, register } = useForm<Applicant>({
         mode: "all",
@@ -29,36 +28,11 @@ export function ApplicationForm({ applicant, applicationId, children }: Applicat
         reValidateMode: "onSubmit"
     });
 
+    console.log({ applicant });
+
     const { showToast } = useToast();
-    const { navigate } = useRouter();
 
     const { t } = useLingui();
-
-    const { mutate: updateApplication, isPending } = useMutation({
-        mutationKey: ["createApplication"],
-        mutationFn: (body: Partial<Application>) => postData(`applications/${applicationId}`, JSON.stringify(body), "PUT"),
-        onSuccess: (data) => {
-            if(data) {
-                void navigate({
-                    to: "/applications"
-                })
-            }
-        },
-        onError: (error) => {
-            if(error.message) {
-                showToast({
-                    message: error.message,
-                    status: "error"
-                });
-            }
-        }
-    })
-
-    const onSubmit = (data: Applicant) => {
-        updateApplication({
-            applicants: [data]
-        })
-    };
 
     const onError = () => {
         showToast({
@@ -158,9 +132,9 @@ export function ApplicationForm({ applicant, applicationId, children }: Applicat
                     <Button type="reset" variant="secondary" onClick={() => reset()}>
                         <Trans>Reset</Trans>
                     </Button>
-                    <Button type="submit" disabled={!formState.isValid || isPending}>
+                    <Button type="submit" disabled={!formState.isValid || isUpdatePending}>
                         {
-                            isPending ? <Trans>Saving</Trans> : <Trans>Save</Trans>
+                            isUpdatePending ? <Trans>Saving</Trans> : <Trans>Save</Trans>
                         }
                     </Button>
                 </StyledForm.ButtonContainer>

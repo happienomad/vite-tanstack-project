@@ -20,7 +20,7 @@ const StyledOverlayBackground = styled.div`
     height: 100%;
 `
 
-interface LoadingOverlayProps extends LoadingSpinnerProps {}
+type LoadingOverlayProps = LoadingSpinnerProps
 
 export function LoadingOverlay({ size = "medium" } : LoadingOverlayProps) {
     return <StyledLoadingOverlay>

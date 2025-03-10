@@ -32,7 +32,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
 
     const showToast = (toastInfo: ToastProps) => {
         setToastInfo(toastInfo);
-        setTimeout(() => setToastInfo(null), 3000);
+        setTimeout(() => setToastInfo(null), 2000);
     };
 
     return (

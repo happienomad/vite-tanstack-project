@@ -13,13 +13,15 @@ export const applicationbyIdQueryOptions = (applicationId: string) => {
     return queryOptions<Application>({
         queryKey: ['applicationById', applicationId],
         queryFn: () => getData(`applications/${applicationId}`),
-        staleTime: 10000
+        staleTime: 10000,
+        throwOnError: true,
     })
 }
 
 export const applicationsQueryOptions = () => {
     return queryOptions<Application[]>({
         queryKey: ['applications'],
-        queryFn: () => getData("applications")
+        queryFn: () => getData("applications"),
+        throwOnError: true
     })
 }

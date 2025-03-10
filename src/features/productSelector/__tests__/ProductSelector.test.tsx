@@ -5,7 +5,7 @@ import { i18n } from "@lingui/core";
 import { createMemoryHistory, createRootRouteWithContext, createRoute, createRouter, RouterProvider } from "@tanstack/react-router";
 import { http, HttpResponse } from "msw";
 import { server } from "~/global/tests/nodeServer";
-import { allProductsMock } from "./productsMock";
+import { allProductsMock } from "~/global/tests/productsMock";
 import { ProductSelector } from "../ProductSelector";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "~/api/queryClient";
@@ -16,20 +16,18 @@ import { API_HOST } from "~/api/fetch";
 import { ToastProvider } from "~/global/providers/ToastProvider";
 
 interface SetupTestProps {
-    overrides?: {
-        products: Product[];
-    }
+    products?: Product[];
 }
 
 
 /* Test setup */
 
 function setupTest({
-    overrides
-}: SetupTestProps = { overrides: { products: allProductsMock } }) {
+    products
+}: SetupTestProps = { products: allProductsMock }) {
     server.use(
         http.get(`${API_HOST}/products`, () => {
-            return HttpResponse.json(overrides?.products)
+            return HttpResponse.json(products)
         })
     )
 
@@ -56,11 +54,11 @@ function setupTest({
 }
 
 function setupTestWithErrors({
-    overrides
-}: SetupTestProps = { overrides: { products: allProductsMock } }) {
+    products
+}: SetupTestProps = { products: allProductsMock }) {
     server.use(
         http.get(`${API_HOST}/products`, () => {
-            return HttpResponse.json(overrides?.products)
+            return HttpResponse.json(products)
         })
     )
 

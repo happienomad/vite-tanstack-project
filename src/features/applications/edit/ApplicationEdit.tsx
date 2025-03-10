@@ -1,21 +1,54 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { StyledApplicationEdit } from "./ApplicationEdit.styled"
-import { getRouteApi } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { ProductCard } from "~/components/ProductCard";
-import { ApplicationForm } from "./form/ApplicationForm";
+import { ApplicantForm } from "./form/ApplicantForm";
 import { applicationbyIdQueryOptions, productsQueryOptions } from "~/api/queries/queryOptions";
 import { LoadingOverlay } from "~/components/LoadingOverlay";
+import { postData } from "~/api/fetch";
+import { Applicant, Application } from "~/global/types/application";
+import { useToast } from "~/global/providers/ToastProvider";
 
-
-const routeApi = getRouteApi("/_products/applications/$applicationId");
 
 export function ApplicationEdit() {
 
-    const { applicationId } = routeApi.useParams();
+    const { applicationId } = useParams({
+        from: "/_products/applications/$applicationId"
+    });
+    const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const { data: applicationInfo, isPending } = useSuspenseQuery(applicationbyIdQueryOptions(applicationId));
 
     const { data: allProducts } = useSuspenseQuery(productsQueryOptions);
+
+    const { mutate: updateApplication, isPending: isUpdatePending } = useMutation({
+            mutationKey: ["createApplication"],
+            mutationFn: (body: Partial<Application>) => postData(`applications/${applicationId}`, JSON.stringify(body), "PUT"),
+            throwOnError: true,
+            onSuccess: (data) => {
+                if(data) {
+                    console.log("Mutation success::", data);
+                    void navigate({
+                        to: "/applications"
+                    })
+                }
+            },
+            onError: (error) => {
+                if(error.message) {
+                    showToast({
+                        message: error.message,
+                        status: "error"
+                    });
+                }
+            }
+        })
+    
+        const onSubmit = (data: Applicant) => {
+            updateApplication({
+                applicants: [data]
+            })
+        };
     
 
     const selectedProduct = allProducts.find((product) => product.id === applicationInfo.productId);
@@ -28,9 +61,9 @@ export function ApplicationEdit() {
                 }
             </StyledApplicationEdit.ProductDetails>
             <StyledApplicationEdit.ApplicationForm>
-                <ApplicationForm applicationId={applicationId} applicant={applicationInfo.applicants[0]}>
+                <ApplicantForm isUpdatePending={isUpdatePending} applicant={applicationInfo.applicants[0]} onSubmit={onSubmit}>
                     { isPending && <LoadingOverlay />}
-                </ApplicationForm>
+                </ApplicantForm>
             </StyledApplicationEdit.ApplicationForm>
         </StyledApplicationEdit.Container>
     )

@@ -20,7 +20,7 @@ export async function getData<T>(url: string): Promise<T> {
         }
         return response.json() as Promise<T>;
     } catch (error) {
-        console.error('Error making API request:', error);
+        console.error('Error with getData:', error, url);
         throw error;
     }
 }
@@ -39,7 +39,7 @@ export async function postData<T>(url: string, body: string, method: "POST" | "P
         }
         return response.json() as Promise<T>;
     } catch (error) {
-        console.error('Error making API request:', error);
+        console.error('Error with postData:', error);
         throw error;
     }
 }
